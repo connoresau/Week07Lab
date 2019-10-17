@@ -13,8 +13,8 @@ public class UserDB {
 
     /**
      * This method inserts user elements and return the number of rows affected.
-     *
      * @author Euna Cho
+     * @author Connor Esau
      * @param user user
      * @return rows rows
      * @throws java.sql.SQLException
@@ -24,15 +24,15 @@ public class UserDB {
         ConnectionPool connectionPool = null;
         Connection connection = null;
 
-        int rows = 0;
+        int rows;
         try {
             connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
             String preparedQuery
                     = "INSERT INTO User_Table "
-                    + "(email, fname, lname, password) "
+                    + "(email, fname, lname, password, role) "
                     + "VALUES "
-                    + "(?, ?, ?, ?)";
+                    + "(?, ?, ?, ?, ?)";
 
             PreparedStatement ps = connection.prepareStatement(preparedQuery);
 
@@ -40,6 +40,7 @@ public class UserDB {
             ps.setString(2, user.getFname());
             ps.setString(3, user.getLname());
             ps.setString(4, user.getPassword());
+            ps.setInt(5, user.getRole().getRoleID());
 
             rows = ps.executeUpdate();
             ps.close();
@@ -63,7 +64,7 @@ public class UserDB {
             connectionPool = ConnectionPool.getInstance();
             connection = connectionPool.getConnection();
 
-            String preparedQuery = "UPDATE User_Table set active=?, fname=?, lname=?, password=? where email=?";
+            String preparedQuery = "UPDATE User_Table set active=?, fname=?, lname=?, password=?, role=? where email=?";
             int successCount = 0;
 
             PreparedStatement statement = connection.prepareStatement(preparedQuery);
@@ -72,6 +73,7 @@ public class UserDB {
             statement.setString(3, user.getLname());
             statement.setString(4, user.getEmail());
             statement.setString(5, user.getPassword());
+            statement.setInt(6, user.getRole().getRoleID());
 
             successCount = statement.executeUpdate();
             statement.close();
@@ -108,8 +110,8 @@ public class UserDB {
                 String fname = rs.getString(3);
                 String lname = rs.getString(4);
                 String password = rs.getString(5);
-                
                 int roleID = rs.getInt(6);
+                
                 RoleDB roleDB = new RoleDB();
                 Role role = roleDB.getRole(roleID);
                         

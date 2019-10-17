@@ -32,20 +32,16 @@ public class UserService {
      */
     public List<User> getAll() throws Exception {
         UserDB db = new UserDB();
-        ArrayList<User> userList = (ArrayList<User>) db.getAll();
-        ArrayList<User> activeUsers = new ArrayList<>();
-        
-        for (int i = 0; i < userList.size(); i++) {
-            if(userList.get(i).isActive()) {
-                activeUsers.add(userList.get(i));
-            }
-        }
+        ArrayList<User> activeUsers = (ArrayList<User>) db.getActive();
         return activeUsers;
     }
 
     /**
      * @Author David and Ayden With leadership from Ember
-     * @param user
+     * @param email email
+     * @param fname fname
+     * @param lname lname
+     * @param password password
      * @return
      * @throws Exception 
      */
