@@ -123,6 +123,46 @@ public class UserDB {
             connectionPool.freeConnection(connection);
         }
     }
+    
+    /**
+     * This method queries the database for all active users. Every user is put into an
+     * ArrayList of users
+     *
+     * @return ArrayList users - the list of users retrieved from the database.
+     * @throws SQLException
+     */
+    public List<User> getActive() throws SQLException {
+        ConnectionPool connectionPool = null;
+        Connection connection = null;
+        try {
+            connectionPool = ConnectionPool.getInstance();
+            connection = connectionPool.getConnection();
+            User user;
+            ArrayList<User> users = new ArrayList<>();
+
+            String preparedQuery = "SELECT email, fname, lname, password, role FROM user_table WHERE active=true";
+            PreparedStatement ps = connection.prepareStatement(preparedQuery);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                String userEmail = rs.getString(1);
+                String fname = rs.getString(2);
+                String lname = rs.getString(3);
+                String password = rs.getString(4);
+                int roleID = rs.getInt(5);
+                
+                RoleDB roleDB = new RoleDB();
+                Role role = roleDB.getRole(roleID);
+                        
+                user = new User(userEmail, fname, lname, password, role);
+                users.add(user);
+            }
+
+            return users;
+        } finally {
+            connectionPool.freeConnection(connection);
+        }
+    }
 
     /**
      * This method queries the database for a particular user (dude) that has a
