@@ -1,9 +1,11 @@
 package services;
 
+import dataaccess.RoleDB;
 import models.User;
 import java.util.List;
 import dataaccess.UserDB;
 import java.util.ArrayList;
+import models.Role;
 
 /**
  * 
@@ -42,12 +44,15 @@ public class UserService {
      * @param fname fname
      * @param lname lname
      * @param password password
+     * @param roleID roleID
      * @return
      * @throws Exception 
      */
-    public int update(String email, String fname, String lname, String password) throws Exception {
+    public int update(String email, String fname, String lname, String password, int roleID) throws Exception {
         UserDB db = new UserDB();
-        User user = new User(email, fname, lname, password, null);
+        RoleService roleServ = new RoleService();
+        Role role = roleServ.getRole(roleID);
+        User user = new User(email, fname, lname, password, role);
         int i = db.update(user);
         return i;
     }
@@ -70,13 +75,19 @@ public class UserService {
 
      /**
      * @Author David and Ayden With leadership from Ember
-     * @param user the user to update
+     * @param email the email to insert
+     * @param fname the first name to insert
+     * @param lname the last name to insert
+     * @param password the password to insert
+     * @param roleID the role id to insert
      * @return the int from UserDb
      * @throws Exception - all exceptions that could be had.
      */
-    public int insert(String email, String fname, String lname, String password) throws Exception {
+    public int insert(String email, String fname, String lname, String password, int roleID) throws Exception {
         UserDB db = new UserDB();
-        User user = new User(email, fname, lname, password, null);
+        RoleService roleServ = new RoleService();
+        Role role = roleServ.getRole(roleID);
+        User user = new User(email, fname, lname, password, role);
         int i = db.insert(user);
         return i;
     }

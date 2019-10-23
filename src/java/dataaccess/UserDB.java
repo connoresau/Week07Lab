@@ -13,6 +13,7 @@ public class UserDB {
 
     /**
      * This method inserts user elements and return the number of rows affected.
+     *
      * @author Euna Cho
      * @author Connor Esau
      * @param user user
@@ -71,9 +72,9 @@ public class UserDB {
             statement.setBoolean(1, user.isActive());
             statement.setString(2, user.getFname());
             statement.setString(3, user.getLname());
-            statement.setString(4, user.getEmail());
-            statement.setString(5, user.getPassword());
-            statement.setInt(6, user.getRole().getRoleID());
+            statement.setString(4, user.getPassword());
+            statement.setInt(5, user.getRole().getRoleID());
+            statement.setString(6, user.getEmail());
 
             successCount = statement.executeUpdate();
             statement.close();
@@ -111,10 +112,10 @@ public class UserDB {
                 String lname = rs.getString(4);
                 String password = rs.getString(5);
                 int roleID = rs.getInt(6);
-                
+
                 RoleDB roleDB = new RoleDB();
                 Role role = roleDB.getRole(roleID);
-                        
+
                 user = new User(userEmail, fname, lname, password, role);
                 user.setActive(active);
                 users.add(user);
@@ -125,10 +126,10 @@ public class UserDB {
             connectionPool.freeConnection(connection);
         }
     }
-    
+
     /**
-     * This method queries the database for all active users. Every user is put into an
-     * ArrayList of users
+     * This method queries the database for all active users. Every user is put
+     * into an ArrayList of users
      *
      * @return ArrayList users - the list of users retrieved from the database.
      * @throws SQLException
@@ -152,10 +153,10 @@ public class UserDB {
                 String lname = rs.getString(3);
                 String password = rs.getString(4);
                 int roleID = rs.getInt(5);
-                
+
                 RoleDB roleDB = new RoleDB();
                 Role role = roleDB.getRole(roleID);
-                        
+
                 user = new User(userEmail, fname, lname, password, role);
                 users.add(user);
             }
@@ -195,11 +196,10 @@ public class UserDB {
                 String lname = rs.getString(4);
                 String password = rs.getString(5);
                 int roleID = rs.getInt(6);
-                
+
                 RoleDB roleDB = new RoleDB();
                 Role role = roleDB.getRole(roleID);
-                
-                
+
                 user = new User(userEmail, fname, lname, password, role);
                 user.setActive(active);
             }
